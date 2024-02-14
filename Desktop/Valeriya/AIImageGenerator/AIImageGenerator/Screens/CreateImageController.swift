@@ -29,12 +29,7 @@ class CreateImageController: UIViewController {
 		view.layer.insertSublayer(gradientLayer, at: 0)
 	}
 	
-	private let searchButton: UIButton = {
-		let button = UIButton(type: .system)
-		button.setImage(UIImage(systemName: "arrowshape.up.circle"), for: .normal)
-		button.addTarget(self, action: #selector(searchButtonTapped), for: .touchUpInside)
-		return button
-	}()
+	private let searchButton = UIButton.makeButton(systemName: "arrow.up.circle", target: self, action:  #selector(searchButtonTapped))
 	
 	private let searchBar: UISearchBar = {
 		let search = UISearchBar()
@@ -61,6 +56,10 @@ class CreateImageController: UIViewController {
 		fetchData(searchText: searchBar.text ?? "")
 	}
 
+	override func viewWillAppear(_ animated: Bool) {
+		self.navigationController?.isNavigationBarHidden = true
+	}
+	
 	//MARK: - Methods
 	
 	// Нажатия на кнопку поиска
@@ -86,8 +85,7 @@ class CreateImageController: UIViewController {
 		do {
 			// Конвертируем данные в JSON
 			let jsonData = try JSONSerialization.data(withJSONObject: requestData)
-			
-			// Отправляем запрос на сервер с использованием текста из поисковой строки
+
 			APICaller.shared.sendPostRequest(jsonData: jsonData, searchText: searchText) { [weak self] result in
 				guard let self = self else { return }
 				switch result {

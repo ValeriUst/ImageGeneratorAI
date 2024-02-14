@@ -27,8 +27,8 @@ final class APICaller {
 		let requestData: [String: Any] = [
 			"key": ConstantsAPI.API_KEY,
 			"prompt": searchText,
-			"width": "512",
-			"height": "512",
+			"width": "1024",
+			"height": "1024",
 			"samples": "1",
 			"enhance_prompt": "yes",
 			"self_attention": "yes",

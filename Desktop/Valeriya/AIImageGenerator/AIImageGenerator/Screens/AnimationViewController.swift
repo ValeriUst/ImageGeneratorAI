@@ -7,7 +7,7 @@ import Lottie
 
 class AnimationViewController: UIViewController {
 	
-	var animationView: LottieAnimationView?
+	private var animationView: LottieAnimationView?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,6 +19,5 @@ class AnimationViewController: UIViewController {
 		animationView?.animationSpeed = 0.9
 		view.addSubview(animationView!)
 		animationView?.play()
-
     }
 }
