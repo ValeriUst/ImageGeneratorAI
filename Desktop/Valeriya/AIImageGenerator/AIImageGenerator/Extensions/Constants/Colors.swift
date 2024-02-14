@@ -6,6 +6,6 @@ import Foundation
 import UIKit
 
 struct Color {
-	
+	static let violet = UIColor(red: 0.216, green: 0.008, blue: 0.345, alpha: 1)
 }
 
