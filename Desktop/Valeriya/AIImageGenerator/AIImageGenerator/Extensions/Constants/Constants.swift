@@ -11,7 +11,4 @@ struct Constants {
 	static let bottomOffsets = 25
 	static let borderWidth: CGFloat = 2
 	static let trailingOffset = 8
-
-
-
 }

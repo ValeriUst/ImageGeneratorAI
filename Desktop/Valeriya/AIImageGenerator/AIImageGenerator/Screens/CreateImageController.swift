@@ -10,6 +10,8 @@ class CreateImageController: UIViewController {
 	// MARK: - Constants
 	
 	// MARK: - Content Views
+	
+	// Добавление градиента на экран
 	private func addGradient() {
 		let screenHeight = UIScreen.main.bounds.height // ширина градиента равна ширины экрана
 		let gradientHeight = screenHeight / 4 // высота градиента равна 1/4 высоты экрана
@@ -57,6 +59,8 @@ class CreateImageController: UIViewController {
 	}
 	
 	//MARK: - Methods
+	
+	// Нажатия на кнопку поиска
 	@objc private func searchButtonTapped() {
 		if let searchText = searchBar.text {
 			searchBarSearchButtonClicked(searchBar)
@@ -81,11 +85,15 @@ class CreateImageController: UIViewController {
 
 // MARK: - Extension UISearchBarDelegate
 extension CreateImageController: UISearchBarDelegate {
+	
+	// Обработка нажатия на кнопку поиска
 	func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
 		guard let searchText = searchBar.text else { return }
 		searchBar.resignFirstResponder() // Скрыть клавиатуру
 
 	}
+	
+	// Редактирования searchBar
 	func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
 		return true
 	}
@@ -93,11 +101,15 @@ extension CreateImageController: UISearchBarDelegate {
 
 // MARK: - Extension UITapGestureRecognizer
 extension UIViewController {
+	
+	// Настройка клавиатуры для скрытия при касании на экран
 	func setupKeyboard() {
 		let tapGesture = UITapGestureRecognizer(target: self, 
 												action: #selector(dismissKeyboard))
 		view.addGestureRecognizer(tapGesture)
 	}
+	
+	// Скрытие клавиатуры по тапу на экран
 	@objc func dismissKeyboard() {
 		view.endEditing(true)
 	}
