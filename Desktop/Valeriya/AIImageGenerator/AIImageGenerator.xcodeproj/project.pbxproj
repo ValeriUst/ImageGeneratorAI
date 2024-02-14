@@ -26,6 +26,8 @@
 		64B2A0892B7CEE4600054AF5 /* NetworkAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64B2A0882B7CEE4600054AF5 /* NetworkAPI.swift */; };
 		64B2A08B2B7CF34900054AF5 /* ModelImages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64B2A08A2B7CF34900054AF5 /* ModelImages.swift */; };
 		64B2A08D2B7D05B700054AF5 /* UIViewController+Keyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64B2A08C2B7D05B700054AF5 /* UIViewController+Keyboard.swift */; };
+		64B2A0902B7D0CC100054AF5 /* AnimationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64B2A08F2B7D0CC100054AF5 /* AnimationViewController.swift */; };
+		64B2A0922B7D0CF100054AF5 /* plane.json in Resources */ = {isa = PBXBuildFile; fileRef = 64B2A0912B7D0CF100054AF5 /* plane.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -49,6 +51,8 @@
 		64B2A0882B7CEE4600054AF5 /* NetworkAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkAPI.swift; sourceTree = "<group>"; };
 		64B2A08A2B7CF34900054AF5 /* ModelImages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelImages.swift; sourceTree = "<group>"; };
 		64B2A08C2B7D05B700054AF5 /* UIViewController+Keyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Keyboard.swift"; sourceTree = "<group>"; };
+		64B2A08F2B7D0CC100054AF5 /* AnimationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationViewController.swift; sourceTree = "<group>"; };
+		64B2A0912B7D0CF100054AF5 /* plane.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = plane.json; sourceTree = "<group>"; };
 		65BA9F5121B1E0B64F445F8E /* Pods-AIImageGenerator.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AIImageGenerator.debug.xcconfig"; path = "Target Support Files/Pods-AIImageGenerator/Pods-AIImageGenerator.debug.xcconfig"; sourceTree = "<group>"; };
 		D7565A00C974B33BEA749E69 /* Pods-AIImageGenerator.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AIImageGenerator.release.xcconfig"; path = "Target Support Files/Pods-AIImageGenerator/Pods-AIImageGenerator.release.xcconfig"; sourceTree = "<group>"; };
 		D776F168D0C9090202FB0E88 /* Pods_AIImageGenerator.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AIImageGenerator.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -109,7 +113,7 @@
 				6433EC172B7B61B20008224F /* Screens */,
 				6433EC152B7B61A30008224F /* Network */,
 				6433EC162B7B61AC0008224F /* Models */,
-				6433EC052B7B61130008224F /* Assets.xcassets */,
+				64B2A08E2B7D0CA200054AF5 /* Assests */,
 				6433EC0A2B7B61130008224F /* Info.plist */,
 			);
 			path = AIImageGenerator;
@@ -185,18 +189,20 @@
 		6433EC172B7B61B20008224F /* Screens */ = {
 			isa = PBXGroup;
 			children = (
-				6433EC732B7C97540008224F /* Search */,
 				6433EC072B7B61130008224F /* LaunchScreen.storyboard */,
 				6433EC002B7B61110008224F /* CreateImageController.swift */,
+				64B2A08F2B7D0CC100054AF5 /* AnimationViewController.swift */,
 			);
 			path = Screens;
 			sourceTree = "<group>";
 		};
-		6433EC732B7C97540008224F /* Search */ = {
+		64B2A08E2B7D0CA200054AF5 /* Assests */ = {
 			isa = PBXGroup;
 			children = (
+				6433EC052B7B61130008224F /* Assets.xcassets */,
+				64B2A0912B7D0CF100054AF5 /* plane.json */,
 			);
-			path = Search;
+			path = Assests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -261,6 +267,7 @@
 			files = (
 				6433EC092B7B61130008224F /* LaunchScreen.storyboard in Resources */,
 				6433EC2A2B7B634A0008224F /* SFPRODISPLAYSEMIBOLDITALIC.OTF in Resources */,
+				64B2A0922B7D0CF100054AF5 /* plane.json in Resources */,
 				6433EC2C2B7B634A0008224F /* SFPRODISPLAYREGULAR.OTF in Resources */,
 				6433EC292B7B634A0008224F /* SFPRODISPLAYBLACKITALIC.OTF in Resources */,
 				6433EC282B7B634A0008224F /* SFPRODISPLAYBOLD.OTF in Resources */,
@@ -321,6 +328,7 @@
 				6433EC192B7B61D60008224F /* Fonts.swift in Sources */,
 				64B2A08B2B7CF34900054AF5 /* ModelImages.swift in Sources */,
 				6433EC1D2B7B622F0008224F /* Colors.swift in Sources */,
+				64B2A0902B7D0CC100054AF5 /* AnimationViewController.swift in Sources */,
 				64B2A0892B7CEE4600054AF5 /* NetworkAPI.swift in Sources */,
 				6433EC012B7B61110008224F /* CreateImageController.swift in Sources */,
 				6433EC1B2B7B62010008224F /* UIView+AddSubview.swift in Sources */,
