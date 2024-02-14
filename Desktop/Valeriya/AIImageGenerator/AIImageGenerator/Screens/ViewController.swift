@@ -9,6 +9,7 @@ class ViewController: UIViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		addGradient()
+		
 	}
 	
 	private func addGradient() {
