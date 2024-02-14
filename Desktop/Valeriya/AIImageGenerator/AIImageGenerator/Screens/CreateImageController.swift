@@ -34,13 +34,13 @@ class CreateImageController: UIViewController {
 	
 	private let searchBar: UISearchBar = {
 		let search = UISearchBar()
-		search.layer.borderWidth = 2
+		search.layer.borderWidth = Constants.borderWidth
 		search.layer.borderColor = UIColor.white.cgColor
 		search.keyboardAppearance = .dark
 		search.tintColor = .white
 		search.barTintColor = .clear
 		search.searchTextField.defaultTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
-		search.layer.cornerRadius = 16
+		search.layer.cornerRadius = Constants.cornerRadius
 		search.searchTextField.leftView = nil
 		return search
 	}()
@@ -68,12 +68,12 @@ class CreateImageController: UIViewController {
 	// MARK: - Constraints
 	private func setConstraints() {
 		searchBar.snp.makeConstraints { search in
-			search.leading.equalToSuperview().offset(16)
-			search.trailing.equalToSuperview().inset(16)
-			search.bottom.equalTo(view.keyboardLayoutGuide.snp.top).offset(-25)
+			search.leading.equalToSuperview().offset(Constants.standardOffset)
+			search.trailing.equalToSuperview().inset(Constants.standardOffset)
+			search.bottom.equalTo(view.keyboardLayoutGuide.snp.top).offset(-Constants.bottomOffsets)
 		}
 		searchButton.snp.makeConstraints { make in
-			make.trailing.equalToSuperview().offset(-8)
+			make.trailing.equalToSuperview().inset(Constants.trailingOffset)
 			make.centerY.equalToSuperview()
 		}
 	}
