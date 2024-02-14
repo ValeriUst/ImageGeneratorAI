@@ -8,6 +8,8 @@ import SnapKit
 class CreateImageController: UIViewController {
 	
 	// MARK: - Constants
+	private var modelData: [ImageModel] = [ImageModel]()
+
 	
 	// MARK: - Content Views
 	
@@ -56,18 +58,49 @@ class CreateImageController: UIViewController {
 		searchBar.delegate = self
 		setConstraints()
 		setupKeyboard()
+		fetchData(searchText: searchBar.text ?? "")
 	}
-	
+
 	//MARK: - Methods
 	
 	// Нажатия на кнопку поиска
 	@objc private func searchButtonTapped() {
-		if let searchText = searchBar.text {
+		if searchBar.text != nil {
 			searchBarSearchButtonClicked(searchBar)
 		}
 	}
 
 	// MARK: - Configure
+	
+	private func fetchData(searchText: String) {
+		// Проверяем, валиден ли URL
+		guard URL(string: ConstantsAPI.baseURL) != nil else {
+			print("Invalid URL")
+			return
+		}
+		// Создаем данные для отправки на сервер
+		let requestData: [String: Any] = [
+			"key": ConstantsAPI.API_KEY,
+			"prompt": searchText,
+		]
+		do {
+			// Конвертируем данные в JSON
+			let jsonData = try JSONSerialization.data(withJSONObject: requestData)
+			
+			// Отправляем запрос на сервер с использованием текста из поисковой строки
+			APICaller.shared.sendPostRequest(jsonData: jsonData, searchText: searchText) { [weak self] result in
+				guard let self = self else { return }
+				switch result {
+				case .success(let responseString):
+					print("Response from server: \(responseString)")
+				case .failure(let error):
+					print("Error: \(error.localizedDescription)")
+				}
+			}
+		} catch {
+			print("Failed to convert data to JSON: \(error.localizedDescription)")
+		}
+	}
 	
 	// MARK: - Constraints
 	private func setConstraints() {
@@ -75,6 +108,7 @@ class CreateImageController: UIViewController {
 			search.leading.equalToSuperview().offset(Constants.standardOffset)
 			search.trailing.equalToSuperview().inset(Constants.standardOffset)
 			search.bottom.equalTo(view.keyboardLayoutGuide.snp.top).offset(-Constants.bottomOffsets)
+			search.height.equalTo(50)
 		}
 		searchButton.snp.makeConstraints { make in
 			make.trailing.equalToSuperview().inset(Constants.trailingOffset)
@@ -84,33 +118,22 @@ class CreateImageController: UIViewController {
 }
 
 // MARK: - Extension UISearchBarDelegate
+
 extension CreateImageController: UISearchBarDelegate {
 	
 	// Обработка нажатия на кнопку поиска
 	func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
 		guard let searchText = searchBar.text else { return }
+		
 		searchBar.resignFirstResponder() // Скрыть клавиатуру
-
+	
+		print("Отправляют \(searchText)")
+		
+		fetchData(searchText: searchText)
 	}
 	
-	// Редактирования searchBar
+	// Редактирование searchBar
 	func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
 		return true
-	}
-}
-
-// MARK: - Extension UITapGestureRecognizer
-extension UIViewController {
-	
-	// Настройка клавиатуры для скрытия при касании на экран
-	func setupKeyboard() {
-		let tapGesture = UITapGestureRecognizer(target: self, 
-												action: #selector(dismissKeyboard))
-		view.addGestureRecognizer(tapGesture)
-	}
-	
-	// Скрытие клавиатуры по тапу на экран
-	@objc func dismissKeyboard() {
-		view.endEditing(true)
 	}
 }
