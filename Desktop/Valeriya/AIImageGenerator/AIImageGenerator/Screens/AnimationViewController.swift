@@ -8,9 +8,9 @@ import Lottie
 class AnimationViewController: UIViewController {
 	
 	// MARK: - Constants
-	private var timeIntervalSeconds: TimeInterval = 19
+	private var timeIntervalSeconds: TimeInterval = 10
 	
-	private var timeStepSeconds: Int = 19
+	private var timeStepSeconds: Int = 10
 	
 	private var duration: Double = 0.5
 	
@@ -19,8 +19,6 @@ class AnimationViewController: UIViewController {
 	// MARK: - Content Views
 	private var animationView: LottieAnimationView?
 	
-	private var countdownTimer: Timer?
-
 	private let countLabel: UILabel = {
 		let label = UILabel()
 		label.textColor = .white
@@ -38,12 +36,15 @@ class AnimationViewController: UIViewController {
 	// MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+		configureViews()
+		setupAnimationView()
+    }
+	
+	private func configureViews() {
 		view.backgroundColor = .black
 		view.addSubviews([countLabel, waitLabel])
-		setupAnimationView()
 		setConstraints()
-		startAnimation()
-    }
+	}
 	
 	//MARK: - Methods
 	private func setupAnimationView() {
@@ -53,6 +54,7 @@ class AnimationViewController: UIViewController {
 		animationView?.loopMode = .loop
 		animationView?.play()
 		view.addSubview(animationView!)
+		startAnimation()
 	}
 	
 	private func startAnimation() {
@@ -69,27 +71,15 @@ class AnimationViewController: UIViewController {
 				Thread.sleep(forTimeInterval: animationDuration / TimeInterval(animationSteps))
 			}
 			
-			DispatchQueue.main.async {  [weak self] in
+			DispatchQueue.main.async { [weak self] in
 				guard let self = self else { return }
 				
 				UIView.animate(withDuration: self.duration, animations: {
-					self.countLabel.alpha = 0
-					self.waitLabel.alpha = 1 // Появление лейбла "Подождите"
-				}) { (_) in
 					self.countLabel.removeFromSuperview()
-					
-					DispatchQueue.main.asyncAfter(deadline: .now() + 4) { [weak self] in
-						guard let self = self else { return }
-						self.navigateToImageResultViewController()
-					}
-				}
+					self.waitLabel.alpha = 1 // Появление лейбла waitLabel
+				})
 			}
 		}
-	}
-	
-	private func navigateToImageResultViewController() {
-		let vc = ImageResultViewController()
-		self.navigationController?.pushViewController(vc, animated: true)
 	}
 
 	// MARK: - Constraints

@@ -18,7 +18,7 @@ enum APIError: Error {
 final class APICaller {
 	static let shared = APICaller()
 	
-	func sendPostRequest(jsonData: Data, searchText: String, completion: @escaping (Result<String, Error>) -> Void) {
+	func sendPostRequest(searchText: String, completion: @escaping (Result<ImageModel, Error>) -> Void) {
 		guard let url = URL(string: ConstantsAPI.baseURL) else {
 			completion(.failure(APIError.invalidURL))
 			return
@@ -34,13 +34,9 @@ final class APICaller {
 			"self_attention": "yes",
 		]
 		
-		guard let jsonData = try? JSONSerialization.data(withJSONObject: requestData.compactMapValues { $0 }) else {
+		guard let jsonData = try? JSONSerialization.data(withJSONObject: requestData) else {
 			completion(.failure(APIError.failedToGetData))
 			return
-		}
-		
-		if let jsonString = String(data: jsonData, encoding: .utf8) {
-			print("Request Data: \(jsonString)") // Выводим содержимое запроса
 		}
 		
 		var request = URLRequest(url: url)
@@ -49,24 +45,18 @@ final class APICaller {
 		request.httpBody = jsonData
 		
 		let task = URLSession.shared.dataTask(with: request) { data, response, error in
-			guard let response = response as? HTTPURLResponse, response.statusCode == 200, let data = data else {
+			guard let data = data, let response = response as? HTTPURLResponse, response.statusCode == 200 else {
 				completion(.failure(APIError.failedToGetData))
 				return
 			}
 			do {
-				let json = try JSONSerialization.jsonObject(with: data, options: [])
-				guard let jsonDict = json as? [String: Any], let output = jsonDict["output"] as? [String], let imageURLString = output.first else {
-					completion(.failure(APIError.failedToGetData))
-					return
-				}
-				
-				let imageURLStringWithoutEscapes = imageURLString.replacingOccurrences(of: "\\/", with: "/")
-				completion(.success(imageURLStringWithoutEscapes))
+				let decoder = JSONDecoder()
+				let imageModel = try decoder.decode(ImageModel.self, from: data)
+				completion(.success(imageModel))
 			} catch {
-				completion(.failure(error))
+				completion(.failure(APIError.failedToDecodeData))
 			}
 		}
-		
 		task.resume()
 	}
 }

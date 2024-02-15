@@ -8,7 +8,8 @@ import SnapKit
 class CreateImageController: UIViewController {
 	
 	// MARK: - Constants
-	private var modelData: [ImageModel] = [ImageModel]()
+	
+	private var animationViewController: AnimationViewController?
 	
 	// MARK: - Content Views
 	
@@ -46,24 +47,26 @@ class CreateImageController: UIViewController {
 	// MARK: - Lifecycle
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		addGradient()
-		view.addSubviews([searchBar])
-		searchBar.addSubviews([searchButton])
-		searchBar.delegate = self
-		setConstraints()
+		configureViews()
 		setupKeyboard()
-		fetchData(searchText: searchBar.text ?? "")
 	}
 
 	override func viewWillAppear(_ animated: Bool) {
 		self.navigationController?.isNavigationBarHidden = true
 	}
 	
-	//MARK: - Methods
+	private func configureViews() {
+		addGradient()
+		view.addSubviews([searchBar])
+		searchBar.addSubviews([searchButton])
+		searchBar.delegate = self
+		setConstraints()
+	}
 	
+	//MARK: - Methods
 	// Нажатия на кнопку поиска
 	@objc private func searchButtonTapped() {
-		if searchBar.text != nil {
+		if let searchText = searchBar.text {
 			searchBarSearchButtonClicked(searchBar)
 		}
 	}
@@ -71,31 +74,31 @@ class CreateImageController: UIViewController {
 	// MARK: - Configure
 	
 	private func fetchData(searchText: String) {
-		// Проверяем, валиден ли URL
-		guard URL(string: ConstantsAPI.baseURL) != nil else {
-			print("Invalid URL")
-			return
-		}
-		// Создаем данные для отправки на сервер
 		let requestData: [String: Any] = [
 			"key": ConstantsAPI.API_KEY,
 			"prompt": searchText,
 		]
-		do {
-			// Конвертируем данные в JSON
-			let jsonData = try JSONSerialization.data(withJSONObject: requestData)
-
-			APICaller.shared.sendPostRequest(jsonData: jsonData, searchText: searchText) { [weak self] result in
-				guard let self = self else { return }
+		APICaller.shared.sendPostRequest(searchText: searchText) { [weak self] result in
+			guard let self = self else { return }
+			
+			DispatchQueue.main.async {
 				switch result {
-				case .success(let responseString):
-					print("Response from server: \(responseString)")
+				case .success(let imageModel):
+					guard let imageURLString = imageModel.output?.first,
+						  let imageURL = URL(string: imageURLString) else {
+						return
+					}
+					let vc = ImageResultViewController()
+					vc.imageURL = imageURL
+					
+					// Отложенный переход на 4 секунды
+					DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
+						self.navigationController?.pushViewController(vc, animated: true)
+					}
 				case .failure(let error):
-					print("Error: \(error.localizedDescription)")
+					print("Ошибка при выполнении запроса: \(error.localizedDescription)")
 				}
 			}
-		} catch {
-			print("Failed to convert data to JSON: \(error.localizedDescription)")
 		}
 	}
 	
@@ -123,10 +126,11 @@ extension CreateImageController: UISearchBarDelegate {
 		guard let searchText = searchBar.text else { return }
 		
 		searchBar.resignFirstResponder() // Скрыть клавиатуру
-	
-		print("Отправляют \(searchText)")
-		
+			
 		fetchData(searchText: searchText)
+				
+		let vc = AnimationViewController()
+		navigationController?.pushViewController(vc, animated: true)
 	}
 	
 	// Редактирование searchBar

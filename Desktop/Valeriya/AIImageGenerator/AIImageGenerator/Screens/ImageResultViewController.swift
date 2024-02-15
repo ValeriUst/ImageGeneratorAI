@@ -3,19 +3,21 @@
 //  Created by Валерия Устименко on 14.02.2024.
 
 import UIKit
-import Photos
+import Kingfisher
 
 class ImageResultViewController: UIViewController {
 	
 	// MARK: - Constants
 	private static let bottomTopOffset = 70
 	
-	// MARK: - Content Views
+	private let defaultURL = URL(string: "https://example.com/default_image.png")// ??
 	
-	private let imageResult: UIImageView = {
+	var imageURL: URL?
+
+	// MARK: - Content Views
+	private var imageResult: UIImageView = {
 		let image = UIImageView()
-		image.image = UIImage(named: "puppyy")
-		image.contentMode = .scaleToFill
+//		image.contentMode = .scaleAspectFit
 		return image
 	}()
 	
@@ -29,25 +31,40 @@ class ImageResultViewController: UIViewController {
 	// MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-		view.backgroundColor = .red
-		view.addSubviews([imageResult, backButton, saveButton, openButton])
+		configureViews()
 		setConstraints()
+		loadImage(from: (imageURL ?? defaultURL)!)
     }
+	
 	override func viewWillAppear(_ animated: Bool) {
 		self.navigationController?.isNavigationBarHidden = true
+	}
+	
+	private func configureViews() {
+		view.backgroundColor = .black
+		view.addSubviews([imageResult, backButton, saveButton, openButton])
+		setConstraints()
 	}
 	
 	//MARK: - Methods
 	@objc private func backButtonTapped() {
 		let vc = CreateImageController()
-		navigationController?.pushViewController(vc, animated: true)
+		navigationController?.pushViewController(vc, animated: false)
 	}
 	
 	@objc private func saveButtonTapped() {
 		guard let selectedImage = imageResult.image else {
-			print("Изображение не найдено!")
 			return
 		}
+		
+		// Создаем генератор обратной связи уведомлений в виде вибрации
+		let feedbackGenerator = UINotificationFeedbackGenerator()
+		
+		// Срабатываем вибрацию
+		feedbackGenerator.notificationOccurred(.success)
+		print("Вибрация запущена") // для проверки вкл вибрации
+		
+		// Сохраняем изображение в галерее
 		UIImageWriteToSavedPhotosAlbum(selectedImage, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)
 	}
 	
@@ -70,7 +87,29 @@ class ImageResultViewController: UIViewController {
 	}
 	
 	// MARK: - Configure
-	
+	// Загрузить изображение с помощью Kingfisher
+	private func loadImage(from imageURL: URL) {
+		let options: KingfisherOptionsInfo = [
+			.transition(.fade(0.5)),
+			.scaleFactor(UIScreen.main.scale),
+			.cacheOriginalImage
+		]
+		imageResult.kf.setImage(with: imageURL,
+								placeholder: nil,
+								options: options,
+								progressBlock: nil) { [weak self] result in
+			guard let self = self else { return }
+			
+			switch result {
+			case .success(let value):
+				// Устанавливаем загруженное изображение в imageResult
+				self.imageResult.image = value.image
+			case .failure(let error):
+				print("Ошибка в контроллере изображения:", error.localizedDescription)
+			}
+		}
+	}
+
 	// MARK: - Constraints
 	private func setConstraints() {
 		imageResult.snp.makeConstraints { image in
