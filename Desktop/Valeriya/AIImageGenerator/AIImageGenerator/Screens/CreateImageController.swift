@@ -9,7 +9,6 @@ class CreateImageController: UIViewController {
 	
 	// MARK: - Constants
 	private var modelData: [ImageModel] = [ImageModel]()
-
 	
 	// MARK: - Content Views
 	

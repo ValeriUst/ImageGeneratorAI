@@ -77,7 +77,7 @@ class ImageResultViewController: UIViewController {
 			image.edges.equalToSuperview()
 		}
 		backButton.snp.makeConstraints { button in
-			button.top.equalToSuperview().offset(bottomTopOffset)
+			button.top.equalToSuperview().offset(ImageResultViewController.bottomTopOffset)
 			button.leading.equalToSuperview().offset(Constants.bottomOffsets)
 			button.height.width.equalTo(Constants.sizeButton)
 		}
