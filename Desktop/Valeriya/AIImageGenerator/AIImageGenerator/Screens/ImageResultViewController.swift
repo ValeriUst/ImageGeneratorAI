@@ -5,28 +5,28 @@
 import UIKit
 import Kingfisher
 
-class ImageResultViewController: UIViewController {
+final class ImageResultViewController: UIViewController {
 	
-	// MARK: - Constants
-	private static let bottomTopOffset = 70
-	
+	// MARK: - Constants	
 	private let defaultURL = URL(string: "https://example.com/default_image.png")// ??
+	private let bottomLabelOffset = 10
 	
 	var imageURL: URL?
 
 	// MARK: - Content Views
-	private var imageResult: UIImageView = {
-		let image = UIImageView()
-//		image.contentMode = .scaleAspectFit
-		return image
-	}()
 	
+	private let imageResult = UIImageView()
+
 	//UIButtons
 	private let openButton = UIButton.makeButton(systemName: "eye.circle", target: self, action:  #selector(openButtonTapped))
 	
 	private let saveButton = UIButton.makeButton(systemName: "arrow.down.circle", target: self, action:  #selector(saveButtonTapped))
 	
 	private let backButton = UIButton.makeButton(systemName: "chevron.backward.circle", target: self, action:  #selector(backButtonTapped))
+	
+	private let timeLabel = UILabel.makeLabel(text: "", font: UIFont.sfProBold(size: 80) ?? .systemFont(ofSize: 80), textColor: .white, isHidden: true)
+	
+	private let dateLabel = UILabel.makeLabel(text: "", font: UIFont.sfProBold(size: 15) ?? .systemFont(ofSize: 80), textColor: .white, isHidden: true)
 
 	// MARK: - Lifecycle
     override func viewDidLoad() {
@@ -34,6 +34,8 @@ class ImageResultViewController: UIViewController {
 		configureViews()
 		setConstraints()
 		loadImage(from: (imageURL ?? defaultURL)!)
+		updateTimeAndDate()
+		
     }
 	
 	override func viewWillAppear(_ animated: Bool) {
@@ -42,7 +44,7 @@ class ImageResultViewController: UIViewController {
 	
 	private func configureViews() {
 		view.backgroundColor = .black
-		view.addSubviews([imageResult, backButton, saveButton, openButton])
+		view.addSubviews([imageResult, backButton, saveButton, openButton, timeLabel, dateLabel])
 		setConstraints()
 	}
 	
@@ -57,10 +59,10 @@ class ImageResultViewController: UIViewController {
 			return
 		}
 		
-		// Создаем генератор обратной связи уведомлений в виде вибрации
+		// Создаем обратную связь в виде вибрации
 		let feedbackGenerator = UINotificationFeedbackGenerator()
 		
-		// Срабатываем вибрацию
+		// Срабатывает вибрация
 		feedbackGenerator.notificationOccurred(.success)
 		print("Вибрация запущена") // для проверки вкл вибрации
 		
@@ -77,6 +79,19 @@ class ImageResultViewController: UIViewController {
 	}
 	
 	@objc private func openButtonTapped() {
+		timeLabel.isHidden.toggle()
+		dateLabel.isHidden.toggle()
+	}
+	
+	@objc private func updateTimeAndDate() {
+		let formatter = DateFormatter()
+		formatter.dateFormat = "HH:mm"
+		let timeString = formatter.string(from: Date())
+		timeLabel.text = timeString
+		
+		formatter.dateFormat = "EEEE, MMMM dd"
+		let dateString = formatter.string(from: Date())
+		dateLabel.text = dateString
 	}
 	
 	//MARK: - Helper Methods
@@ -90,7 +105,7 @@ class ImageResultViewController: UIViewController {
 	// Загрузить изображение с помощью Kingfisher
 	private func loadImage(from imageURL: URL) {
 		let options: KingfisherOptionsInfo = [
-			.transition(.fade(0.5)),
+			.transition(.fade(0.3)),
 			.scaleFactor(UIScreen.main.scale),
 			.cacheOriginalImage
 		]
@@ -104,6 +119,7 @@ class ImageResultViewController: UIViewController {
 			case .success(let value):
 				// Устанавливаем загруженное изображение в imageResult
 				self.imageResult.image = value.image
+				
 			case .failure(let error):
 				print("Ошибка в контроллере изображения:", error.localizedDescription)
 			}
@@ -116,7 +132,7 @@ class ImageResultViewController: UIViewController {
 			image.edges.equalToSuperview()
 		}
 		backButton.snp.makeConstraints { button in
-			button.top.equalToSuperview().offset(ImageResultViewController.bottomTopOffset)
+			button.top.equalToSuperview().offset(Constants.bottomTopOffset)
 			button.leading.equalToSuperview().offset(Constants.bottomOffsets)
 			button.height.width.equalTo(Constants.sizeButton)
 		}
@@ -138,6 +154,15 @@ class ImageResultViewController: UIViewController {
 		}
 		saveButton.imageView?.snp.makeConstraints { make in
 			make.edges.equalTo(saveButton)
+		}
+		dateLabel.snp.makeConstraints { label in
+			label.centerX.equalToSuperview()
+			label.top.equalToSuperview().offset(Constants.bottomTopOffset)
+		}
+		timeLabel.snp.makeConstraints { label in
+			label.centerX.equalToSuperview()
+			label.top.equalTo(dateLabel.snp.bottom).offset(self.bottomLabelOffset)
+
 		}
 	}
 }

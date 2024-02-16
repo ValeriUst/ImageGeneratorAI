@@ -5,11 +5,9 @@
 import UIKit
 import SnapKit
 
-class CreateImageController: UIViewController {
+final class CreateImageController: UIViewController {
 	
 	// MARK: - Constants
-	
-	private var animationViewController: AnimationViewController?
 	
 	// MARK: - Content Views
 	
@@ -66,28 +64,30 @@ class CreateImageController: UIViewController {
 	//MARK: - Methods
 	// Нажатия на кнопку поиска
 	@objc private func searchButtonTapped() {
-		if let searchText = searchBar.text {
+		if searchBar.text != nil {
 			searchBarSearchButtonClicked(searchBar)
 		}
 	}
 
 	// MARK: - Configure
-	
 	private func fetchData(searchText: String) {
-		let requestData: [String: Any] = [
-			"key": ConstantsAPI.API_KEY,
-			"prompt": searchText,
-		]
+		
 		APICaller.shared.sendPostRequest(searchText: searchText) { [weak self] result in
 			guard let self = self else { return }
+			print ("начало")
 			
 			DispatchQueue.main.async {
+				
+				print ("прошло диспач")
+
 				switch result {
 				case .success(let imageModel):
 					guard let imageURLString = imageModel.output?.first,
 						  let imageURL = URL(string: imageURLString) else {
 						return
 					}
+					print ("загрузили картинку")
+
 					let vc = ImageResultViewController()
 					vc.imageURL = imageURL
 					
@@ -108,7 +108,7 @@ class CreateImageController: UIViewController {
 			search.leading.equalToSuperview().offset(Constants.standardOffset)
 			search.trailing.equalToSuperview().inset(Constants.standardOffset)
 			search.bottom.equalTo(view.keyboardLayoutGuide.snp.top).offset(-Constants.bottomOffsets)
-			search.height.equalTo(50)
+			search.height.equalTo(Constants.searchHight)
 		}
 		searchButton.snp.makeConstraints { make in
 			make.trailing.equalToSuperview().inset(Constants.trailingOffset)
@@ -120,19 +120,19 @@ class CreateImageController: UIViewController {
 // MARK: - Extension UISearchBarDelegate
 
 extension CreateImageController: UISearchBarDelegate {
-	
 	// Обработка нажатия на кнопку поиска
 	func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
 		guard let searchText = searchBar.text else { return }
-		
 		searchBar.resignFirstResponder() // Скрыть клавиатуру
-			
 		fetchData(searchText: searchText)
-				
+		pushViewController()
+	}
+	
+	func pushViewController() {
 		let vc = AnimationViewController()
 		navigationController?.pushViewController(vc, animated: true)
 	}
-	
+
 	// Редактирование searchBar
 	func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
 		return true

@@ -5,7 +5,7 @@
 import UIKit
 import Lottie
 
-class AnimationViewController: UIViewController {
+final class AnimationViewController: UIViewController {
 	
 	// MARK: - Constants
 	private var timeIntervalSeconds: TimeInterval = 10
@@ -14,7 +14,7 @@ class AnimationViewController: UIViewController {
 	
 	private var duration: Double = 0.5
 	
-	private let topOffsetsLabel = 100
+	private let topOffsetsLabel: Int = 100
 	
 	// MARK: - Content Views
 	private var animationView: LottieAnimationView?
@@ -28,8 +28,8 @@ class AnimationViewController: UIViewController {
 	private let waitLabel: UILabel = {
 		let label = UILabel()
 		label.textColor = .white
-		label.text = "We need a little bit more time..."
-		label.alpha = 0
+		label.text = Constants.waitText
+		label.alpha = Constants.alpha
 		return label
 	}()
 	
@@ -76,7 +76,7 @@ class AnimationViewController: UIViewController {
 				
 				UIView.animate(withDuration: self.duration, animations: {
 					self.countLabel.removeFromSuperview()
-					self.waitLabel.alpha = 1 // Появление лейбла waitLabel
+					self.waitLabel.alpha = Constants.alpha // Появление лейбла waitLabel
 				})
 			}
 		}
