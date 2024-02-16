@@ -16,7 +16,11 @@ final class ImageResultViewController: UIViewController {
 	// MARK: - Content Views
 	
 	//UIImageView
-	private let imageResult = UIImageView()
+	private let imageResult: UIImageView = {
+		let image = UIImageView()
+		image.contentMode = .scaleAspectFill
+		return image
+	}()
 
 	//UIButtons
 	private let openButton = UIButton.makeButton(systemName: "eye.circle", target: self, action:  #selector(openButtonTapped))
