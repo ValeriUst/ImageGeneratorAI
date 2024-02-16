@@ -6,9 +6,7 @@ import UIKit
 import SnapKit
 
 final class CreateImageController: UIViewController {
-	
-	// MARK: - Constants
-	
+		
 	// MARK: - Content Views
 	
 	// Добавление градиента на экран
@@ -53,53 +51,59 @@ final class CreateImageController: UIViewController {
 		self.navigationController?.isNavigationBarHidden = true
 	}
 	
+	// MARK: - Configure
 	private func configureViews() {
-		addGradient()
 		view.addSubviews([searchBar])
 		searchBar.addSubviews([searchButton])
 		searchBar.delegate = self
+		addGradient()
 		setConstraints()
 	}
-	
-	//MARK: - Methods
-	// Нажатия на кнопку поиска
-	@objc private func searchButtonTapped() {
-		if searchBar.text != nil {
-			searchBarSearchButtonClicked(searchBar)
-		}
-	}
 
-	// MARK: - Configure
 	private func fetchData(searchText: String) {
 		
 		APICaller.shared.sendPostRequest(searchText: searchText) { [weak self] result in
 			guard let self = self else { return }
-			print ("начало")
 			
 			DispatchQueue.main.async {
-				
-				print ("прошло диспач")
-
+								
 				switch result {
 				case .success(let imageModel):
 					guard let imageURLString = imageModel.output?.first,
 						  let imageURL = URL(string: imageURLString) else {
 						return
 					}
-					print ("загрузили картинку")
-
+					print("загрузили картинку\(imageURL)")
+					
 					let vc = ImageResultViewController()
 					vc.imageURL = imageURL
 					
 					// Отложенный переход на 4 секунды
-					DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
+					DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
 						self.navigationController?.pushViewController(vc, animated: true)
 					}
 				case .failure(let error):
 					print("Ошибка при выполнении запроса: \(error.localizedDescription)")
+					
+					let alert = UIAlertController(title: "Ошибка", message: "Загрузка невозможна", preferredStyle: .alert)
+					alert.addAction(UIAlertAction(title: "Повторить", style: .default, handler: { _ in
+						// Повторяем загрузку данных
+						self.fetchData(searchText: searchText)
+						self.pushViewController(vc: AnimationViewController())
+					}))
+					alert.addAction(UIAlertAction(title: "Закрыть", style: .cancel, handler: { _ in
+						self.pushViewController(vc: CreateImageController())
+					}))
+					self.present(alert, animated: true, completion: nil)
 				}
 			}
 		}
+	}
+	
+	//MARK: - Methods
+	// Нажатия на кнопку поиска
+	@objc private func searchButtonTapped() {
+		searchBar.text != nil ? searchBarSearchButtonClicked(searchBar) : ()
 	}
 	
 	// MARK: - Constraints
@@ -125,11 +129,10 @@ extension CreateImageController: UISearchBarDelegate {
 		guard let searchText = searchBar.text else { return }
 		searchBar.resignFirstResponder() // Скрыть клавиатуру
 		fetchData(searchText: searchText)
-		pushViewController()
+		pushViewController(vc: AnimationViewController())
 	}
 	
-	func pushViewController() {
-		let vc = AnimationViewController()
+	private func pushViewController(vc: UIViewController) {
 		navigationController?.pushViewController(vc, animated: true)
 	}
 

@@ -15,6 +15,7 @@ final class ImageResultViewController: UIViewController {
 
 	// MARK: - Content Views
 	
+	//UIImageView
 	private let imageResult = UIImageView()
 
 	//UIButtons
@@ -24,6 +25,7 @@ final class ImageResultViewController: UIViewController {
 	
 	private let backButton = UIButton.makeButton(systemName: "chevron.backward.circle", target: self, action:  #selector(backButtonTapped))
 	
+	//UILabel
 	private let timeLabel = UILabel.makeLabel(text: "", font: UIFont.sfProBold(size: 80) ?? .systemFont(ofSize: 80), textColor: .white, isHidden: true)
 	
 	private let dateLabel = UILabel.makeLabel(text: "", font: UIFont.sfProBold(size: 15) ?? .systemFont(ofSize: 80), textColor: .white, isHidden: true)
@@ -37,7 +39,6 @@ final class ImageResultViewController: UIViewController {
 		updateTimeAndDate()
 		
     }
-	
 	override func viewWillAppear(_ animated: Bool) {
 		self.navigationController?.isNavigationBarHidden = true
 	}
@@ -77,21 +78,10 @@ final class ImageResultViewController: UIViewController {
 			showAlertWith(title: "Сохранено!", message: "Ваше изображение было сохранено в галерее.")
 		}
 	}
-	
+	// При нажатии скрываются/появляются лейблы
 	@objc private func openButtonTapped() {
 		timeLabel.isHidden.toggle()
 		dateLabel.isHidden.toggle()
-	}
-	
-	@objc private func updateTimeAndDate() {
-		let formatter = DateFormatter()
-		formatter.dateFormat = "HH:mm"
-		let timeString = formatter.string(from: Date())
-		timeLabel.text = timeString
-		
-		formatter.dateFormat = "EEEE, MMMM dd"
-		let dateString = formatter.string(from: Date())
-		dateLabel.text = dateString
 	}
 	
 	//MARK: - Helper Methods
@@ -101,9 +91,15 @@ final class ImageResultViewController: UIViewController {
 		present(ac, animated: true)
 	}
 	
+	// Метод для создания и показа контроллера
+	private func pushViewController(vc: UIViewController) {
+		navigationController?.pushViewController(vc, animated: true)
+	}
+	
 	// MARK: - Configure
 	// Загрузить изображение с помощью Kingfisher
 	private func loadImage(from imageURL: URL) {
+		print ("получили картинку\(imageURL)")
 		let options: KingfisherOptionsInfo = [
 			.transition(.fade(0.3)),
 			.scaleFactor(UIScreen.main.scale),
@@ -114,7 +110,8 @@ final class ImageResultViewController: UIViewController {
 								options: options,
 								progressBlock: nil) { [weak self] result in
 			guard let self = self else { return }
-			
+			print ("которая видна картинку\(imageURL)")
+
 			switch result {
 			case .success(let value):
 				// Устанавливаем загруженное изображение в imageResult
@@ -122,6 +119,13 @@ final class ImageResultViewController: UIViewController {
 				
 			case .failure(let error):
 				print("Ошибка в контроллере изображения:", error.localizedDescription)
+			
+				// Показываем алерт в случае ошибки
+				let alert = UIAlertController(title: "Ошибка", message: "Изображение недоступно", preferredStyle: .alert)
+				alert.addAction(UIAlertAction(title: "Закрыть", style: .cancel, handler: { _ in
+					self.pushViewController(vc: CreateImageController())
+				}))
+				self.present(alert, animated: true, completion: nil)
 			}
 		}
 	}
@@ -164,5 +168,18 @@ final class ImageResultViewController: UIViewController {
 			label.top.equalTo(dateLabel.snp.bottom).offset(self.bottomLabelOffset)
 
 		}
+	}
+}
+
+extension ImageResultViewController {
+	@objc func updateTimeAndDate() {
+		let formatter = DateFormatter()
+		formatter.dateFormat = "HH:mm"
+		let timeString = formatter.string(from: Date())
+		timeLabel.text = timeString
+		
+		formatter.dateFormat = "EEEE, MMMM dd"
+		let dateString = formatter.string(from: Date())
+		dateLabel.text = dateString
 	}
 }

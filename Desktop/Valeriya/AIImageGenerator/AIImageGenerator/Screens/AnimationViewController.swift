@@ -22,14 +22,16 @@ final class AnimationViewController: UIViewController {
 	private let countLabel: UILabel = {
 		let label = UILabel()
 		label.textColor = .white
+		label.font = UIFont.sfProSemiBoldItalic(size: 20)
 		return label
 	}()
 	
 	private let waitLabel: UILabel = {
 		let label = UILabel()
 		label.textColor = .white
+		label.font = UIFont.sfProSemiBoldItalic(size: 20)
 		label.text = Constants.waitText
-		label.alpha = Constants.alpha
+		label.alpha = Constants.alphaNo
 		return label
 	}()
 	
@@ -76,7 +78,7 @@ final class AnimationViewController: UIViewController {
 				
 				UIView.animate(withDuration: self.duration, animations: {
 					self.countLabel.removeFromSuperview()
-					self.waitLabel.alpha = Constants.alpha // Появление лейбла waitLabel
+					self.waitLabel.alpha = Constants.alphaYes // Появление лейбла waitLabel
 				})
 			}
 		}
