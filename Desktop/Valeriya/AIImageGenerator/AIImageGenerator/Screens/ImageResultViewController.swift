@@ -100,6 +100,7 @@ final class ImageResultViewController: UIViewController {
 	// Загрузить изображение с помощью Kingfisher
 	private func loadImage(from imageURL: URL) {
 		print ("получили картинку\(imageURL)")
+		
 		let options: KingfisherOptionsInfo = [
 			.transition(.fade(0.3)),
 			.scaleFactor(UIScreen.main.scale),
@@ -110,7 +111,7 @@ final class ImageResultViewController: UIViewController {
 								options: options,
 								progressBlock: nil) { [weak self] result in
 			guard let self = self else { return }
-			print ("которая видна картинку\(imageURL)")
+			print ("которая видна \(imageURL)")
 
 			switch result {
 			case .success(let value):
