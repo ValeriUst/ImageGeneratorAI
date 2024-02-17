@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		318455B01E8216F990EDE3D4 /* Pods_AIImageGenerator.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D776F168D0C9090202FB0E88 /* Pods_AIImageGenerator.framework */; };
+		6409459E2B809F16001D3623 /* EasyTipView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6409459D2B809F16001D3623 /* EasyTipView+Extension.swift */; };
 		64213E3C2B7F110C0086CCDF /* UILabel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64213E3B2B7F110C0086CCDF /* UILabel+Extension.swift */; };
 		6433EBFD2B7B61110008224F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6433EBFC2B7B61110008224F /* AppDelegate.swift */; };
 		6433EBFF2B7B61110008224F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6433EBFE2B7B61110008224F /* SceneDelegate.swift */; };
@@ -34,6 +35,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		6409459D2B809F16001D3623 /* EasyTipView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EasyTipView+Extension.swift"; sourceTree = "<group>"; };
 		64213E3B2B7F110C0086CCDF /* UILabel+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Extension.swift"; sourceTree = "<group>"; };
 		6433EBF92B7B61110008224F /* AIImageGenerator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AIImageGenerator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6433EBFC2B7B61110008224F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -91,6 +93,39 @@
 				D7565A00C974B33BEA749E69 /* Pods-AIImageGenerator.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		640945972B809E6D001D3623 /* CreateImageController */ = {
+			isa = PBXGroup;
+			children = (
+				6433EC002B7B61110008224F /* CreateImageController.swift */,
+			);
+			path = CreateImageController;
+			sourceTree = "<group>";
+		};
+		640945982B809E84001D3623 /* AnimationViewController */ = {
+			isa = PBXGroup;
+			children = (
+				64B2A08F2B7D0CC100054AF5 /* AnimationViewController.swift */,
+			);
+			path = AnimationViewController;
+			sourceTree = "<group>";
+		};
+		640945992B809E9B001D3623 /* ImageResultViewController */ = {
+			isa = PBXGroup;
+			children = (
+				6409459A2B809EB4001D3623 /* Extensions */,
+				64B2A0932B7D16E700054AF5 /* ImageResultViewController.swift */,
+			);
+			path = ImageResultViewController;
+			sourceTree = "<group>";
+		};
+		6409459A2B809EB4001D3623 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				6409459D2B809F16001D3623 /* EasyTipView+Extension.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		6433EBF02B7B61110008224F = {
@@ -198,9 +233,9 @@
 			isa = PBXGroup;
 			children = (
 				6433EC072B7B61130008224F /* LaunchScreen.storyboard */,
-				6433EC002B7B61110008224F /* CreateImageController.swift */,
-				64B2A08F2B7D0CC100054AF5 /* AnimationViewController.swift */,
-				64B2A0932B7D16E700054AF5 /* ImageResultViewController.swift */,
+				640945972B809E6D001D3623 /* CreateImageController */,
+				640945982B809E84001D3623 /* AnimationViewController */,
+				640945992B809E9B001D3623 /* ImageResultViewController */,
 			);
 			path = Screens;
 			sourceTree = "<group>";
@@ -345,6 +380,7 @@
 				6433EBFD2B7B61110008224F /* AppDelegate.swift in Sources */,
 				64B2A0962B7D1FCE00054AF5 /* UIButton.swift in Sources */,
 				64213E3C2B7F110C0086CCDF /* UILabel+Extension.swift in Sources */,
+				6409459E2B809F16001D3623 /* EasyTipView+Extension.swift in Sources */,
 				6433EC2F2B7C88120008224F /* UIView+Gradient.swift in Sources */,
 				6433EC1F2B7B623F0008224F /* Constants.swift in Sources */,
 				64B2A08D2B7D05B700054AF5 /* UIViewController+Keyboard.swift in Sources */,

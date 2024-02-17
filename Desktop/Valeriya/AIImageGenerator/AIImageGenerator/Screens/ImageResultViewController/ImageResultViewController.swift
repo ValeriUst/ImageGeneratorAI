@@ -4,6 +4,7 @@
 
 import UIKit
 import Kingfisher
+import EasyTipView
 
 final class ImageResultViewController: UIViewController {
 	
@@ -25,14 +26,14 @@ final class ImageResultViewController: UIViewController {
 	//UIButtons
 	private let openButton = UIButton.makeButton(systemName: "eye.circle", target: self, action:  #selector(openButtonTapped))
 	
-	private let saveButton = UIButton.makeButton(systemName: "arrow.down.circle", target: self, action:  #selector(saveButtonTapped))
+	public let saveButton = UIButton.makeButton(systemName: "arrow.down.circle", target: self, action:  #selector(saveButtonTapped))
 	
 	private let backButton = UIButton.makeButton(systemName: "chevron.backward.circle", target: self, action:  #selector(backButtonTapped))
 	
 	//UILabel
-	private let timeLabel = UILabel.makeLabel(text: "", font: UIFont.sfProBold(size: 80) ?? .systemFont(ofSize: 80), textColor: .white, isHidden: true)
+	public let timeLabel = UILabel.makeLabel(text: "", font: UIFont.sfProBold(size: 80) ?? .systemFont(ofSize: 80), textColor: .white, isHidden: true)
 	
-	private let dateLabel = UILabel.makeLabel(text: "", font: UIFont.sfProBold(size: 15) ?? .systemFont(ofSize: 80), textColor: .white, isHidden: true)
+	public let dateLabel = UILabel.makeLabel(text: "", font: UIFont.sfProBold(size: 15) ?? .systemFont(ofSize: 80), textColor: .white, isHidden: true)
 
 	// MARK: - Lifecycle
     override func viewDidLoad() {
@@ -41,8 +42,8 @@ final class ImageResultViewController: UIViewController {
 		setConstraints()
 		loadImage(from: (imageURL ?? defaultURL)!)
 		updateTimeAndDate()
-		
     }
+	
 	override func viewWillAppear(_ animated: Bool) {
 		self.navigationController?.isNavigationBarHidden = true
 	}
@@ -63,7 +64,6 @@ final class ImageResultViewController: UIViewController {
 		guard let selectedImage = imageResult.image else {
 			return
 		}
-		
 		// Создаем обратную связь в виде вибрации
 		let feedbackGenerator = UINotificationFeedbackGenerator()
 		
@@ -76,23 +76,17 @@ final class ImageResultViewController: UIViewController {
 	}
 	
 	@objc private func image(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
-		if let error = error {
-			showAlertWith(title: "Ошибка сохранения", message: error.localizedDescription)
+		if error != nil {
+			createEasyTipView(forView: self.view, text: Constants.alertTipViewOk, onTap: nil)
 		} else {
-			showAlertWith(title: "Сохранено!", message: "Ваше изображение было сохранено в галерее.")
+			createEasyTipView(forView: self.view, text: Constants.alertTipViewError, onTap: nil)
 		}
 	}
+	
 	// При нажатии скрываются/появляются лейблы
 	@objc private func openButtonTapped() {
 		timeLabel.isHidden.toggle()
 		dateLabel.isHidden.toggle()
-	}
-	
-	//MARK: - Helper Methods
-	private func showAlertWith(title: String, message: String){
-		let ac = UIAlertController(title: title, message: message, preferredStyle: .alert)
-		ac.addAction(UIAlertAction(title: "OK", style: .default))
-		present(ac, animated: true)
 	}
 	
 	// Метод для создания и показа контроллера
@@ -103,7 +97,6 @@ final class ImageResultViewController: UIViewController {
 	// MARK: - Configure
 	// Загрузить изображение с помощью Kingfisher
 	private func loadImage(from imageURL: URL) {
-		print ("получили картинку\(imageURL)")
 		
 		let options: KingfisherOptionsInfo = [
 			.transition(.fade(0.3)),
@@ -115,7 +108,6 @@ final class ImageResultViewController: UIViewController {
 								options: options,
 								progressBlock: nil) { [weak self] result in
 			guard let self = self else { return }
-			print ("которая видна \(imageURL)")
 
 			switch result {
 			case .success(let value):
@@ -124,10 +116,9 @@ final class ImageResultViewController: UIViewController {
 				
 			case .failure(let error):
 				print("Ошибка в контроллере изображения:", error.localizedDescription)
-			
 				// Показываем алерт в случае ошибки
-				let alert = UIAlertController(title: "Ошибка", message: "Изображение недоступно", preferredStyle: .alert)
-				alert.addAction(UIAlertAction(title: "Закрыть", style: .cancel, handler: { _ in
+				let alert = UIAlertController(title: Constants.alertErrorTitle, message: Constants.alertErrorMessage, preferredStyle: .alert)
+				alert.addAction(UIAlertAction(title: Constants.alertErrorClose, style: .cancel, handler: { _ in
 					self.pushViewController(vc: CreateImageController())
 				}))
 				self.present(alert, animated: true, completion: nil)
@@ -171,7 +162,6 @@ final class ImageResultViewController: UIViewController {
 		timeLabel.snp.makeConstraints { label in
 			label.centerX.equalToSuperview()
 			label.top.equalTo(dateLabel.snp.bottom).offset(self.bottomLabelOffset)
-
 		}
 	}
 }

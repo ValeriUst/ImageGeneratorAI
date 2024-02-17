@@ -7,15 +7,6 @@ import Lottie
 
 final class AnimationViewController: UIViewController {
 	
-	// MARK: - Constants
-	private var timeIntervalSeconds: TimeInterval = 10
-	
-	private var timeStepSeconds: Int = 10
-	
-	private var duration: Double = 0.5
-	
-	private let topOffsetsLabel: Int = 100
-	
 	// MARK: - Content Views
 	private var animationView: LottieAnimationView?
 	
@@ -64,8 +55,8 @@ final class AnimationViewController: UIViewController {
 		DispatchQueue.global(qos: .userInitiated).async { [weak self] in
 			guard let self = self else { return }
 			
-			let animationDuration: TimeInterval = self.timeIntervalSeconds
-			let animationSteps = self.timeStepSeconds
+			let animationDuration: TimeInterval = Constants.timeIntervalSeconds
+			let animationSteps = Constants.timeStepSeconds
 			for step in (0...animationSteps).reversed() {
 				DispatchQueue.main.async {
 					self.countLabel.text = "Estimated time \(step) sec"
@@ -76,7 +67,7 @@ final class AnimationViewController: UIViewController {
 			DispatchQueue.main.async { [weak self] in
 				guard let self = self else { return }
 				
-				UIView.animate(withDuration: self.duration, animations: {
+				UIView.animate(withDuration: Constants.duration, animations: {
 					self.countLabel.removeFromSuperview()
 					self.waitLabel.alpha = Constants.alphaYes // Появление лейбла waitLabel
 				})
@@ -87,11 +78,11 @@ final class AnimationViewController: UIViewController {
 	// MARK: - Constraints
 	private func setConstraints() {
 		countLabel.snp.makeConstraints { label in
-			label.top.equalToSuperview().offset(topOffsetsLabel)
+			label.top.equalToSuperview().offset(Constants.topOffsetsLabel)
 			label.centerX.equalToSuperview()
 		}
 		waitLabel.snp.makeConstraints { label in
-			label.top.equalToSuperview().offset(topOffsetsLabel)
+			label.top.equalToSuperview().offset(Constants.topOffsetsLabel)
 			label.centerX.equalToSuperview()
 		}
 	}

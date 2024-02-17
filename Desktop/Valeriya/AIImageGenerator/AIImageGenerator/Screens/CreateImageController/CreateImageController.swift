@@ -85,13 +85,13 @@ final class CreateImageController: UIViewController {
 				case .failure(let error):
 					print("Ошибка при выполнении запроса: \(error.localizedDescription)")
 					
-					let alert = UIAlertController(title: "Ошибка", message: "Загрузка невозможна", preferredStyle: .alert)
-					alert.addAction(UIAlertAction(title: "Повторить", style: .default, handler: { _ in
+					let alert = UIAlertController(title: Constants.alertImageErrorTitle, message: Constants.alertImageErrorText, preferredStyle: .alert)
+					alert.addAction(UIAlertAction(title: Constants.alertImageErrorReturn, style: .default, handler: { _ in
 						// Повторяем загрузку данных
 						self.fetchData(searchText: searchText)
 						self.pushViewController(vc: AnimationViewController())
 					}))
-					alert.addAction(UIAlertAction(title: "Закрыть", style: .cancel, handler: { _ in
+					alert.addAction(UIAlertAction(title: Constants.alertImageErrorClose, style: .cancel, handler: { _ in
 						self.pushViewController(vc: CreateImageController())
 					}))
 					self.present(alert, animated: true, completion: nil)
@@ -122,7 +122,6 @@ final class CreateImageController: UIViewController {
 }
 
 // MARK: - Extension UISearchBarDelegate
-
 extension CreateImageController: UISearchBarDelegate {
 	// Обработка нажатия на кнопку поиска
 	func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
