@@ -2,7 +2,6 @@
 //  AIImageGenerator
 //  Created by Валерия Устименко on 14.02.2024.
 
-import Foundation
 import UIKit
 
 extension UIButton {

@@ -2,7 +2,6 @@
 //  AIImageGenerator
 //  Created by Валерия Устименко on 13.02.2024.
 
-import Foundation
 import UIKit
 
 struct Constants {
@@ -41,4 +40,8 @@ struct Constants {
 	static let alertImageErrorText: String = "Загрузка невозможна"
 	static let alertImageErrorReturn: String = "Повторить"
 	static let alertImageErrorClose: String = "Закрыть"
+	static let errorImage: String = "Ошибка в контроллере изображения:"
+	
+	static let dateHours: String = "HH:mm"
+	static let dateFormatter: String = "EEEE, MMMM dd"
 }

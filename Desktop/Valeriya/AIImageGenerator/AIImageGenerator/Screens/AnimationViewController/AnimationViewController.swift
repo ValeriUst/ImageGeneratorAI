@@ -7,9 +7,10 @@ import Lottie
 
 final class AnimationViewController: UIViewController {
 	
-	// MARK: - Content Views
+	// MARK: - Property
 	private var animationView: LottieAnimationView?
 	
+	// MARK: - Content Views
 	private let countLabel: UILabel = {
 		let label = UILabel()
 		label.textColor = .white

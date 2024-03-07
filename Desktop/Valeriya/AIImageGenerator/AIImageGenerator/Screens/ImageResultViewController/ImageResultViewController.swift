@@ -9,9 +9,8 @@ import EasyTipView
 final class ImageResultViewController: UIViewController {
 	
 	// MARK: - Constants	
-	private let defaultURL = URL(string: "https://example.com/default_image.png")// ??
-	private let bottomLabelOffset = 10
-	
+	private let defaultURL = URL(string: "https://example.com/default_image.png")
+	private let bottomLabelOffset: CGFloat = 10
 	var imageURL: URL?
 
 	// MARK: - Content Views
@@ -115,7 +114,7 @@ final class ImageResultViewController: UIViewController {
 				self.imageResult.image = value.image
 				
 			case .failure(let error):
-				print("Ошибка в контроллере изображения:", error.localizedDescription)
+				print(Constants.errorImage, error.localizedDescription)
 				// Показываем алерт в случае ошибки
 				let alert = UIAlertController(title: Constants.alertErrorTitle, message: Constants.alertErrorMessage, preferredStyle: .alert)
 				alert.addAction(UIAlertAction(title: Constants.alertErrorClose, style: .cancel, handler: { _ in
@@ -169,11 +168,11 @@ final class ImageResultViewController: UIViewController {
 extension ImageResultViewController {
 	@objc func updateTimeAndDate() {
 		let formatter = DateFormatter()
-		formatter.dateFormat = "HH:mm"
+		formatter.dateFormat = Constants.dateHours
 		let timeString = formatter.string(from: Date())
 		timeLabel.text = timeString
 		
-		formatter.dateFormat = "EEEE, MMMM dd"
+		formatter.dateFormat = Constants.dateFormatter
 		let dateString = formatter.string(from: Date())
 		dateLabel.text = dateString
 	}
